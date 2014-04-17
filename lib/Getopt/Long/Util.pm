@@ -1,6 +1,6 @@
 package Getopt::Long::Util;
 
-use 5.010;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -50,6 +50,8 @@ sub humanize_getopt_long_opt_spec {
 }
 
 #ABSTRACT: Utilities for Getopt::Long
+
+=for Pod::Coverage ^(gospec2human)$
 
 =head1 FUNCTIONS
 
