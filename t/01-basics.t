@@ -13,12 +13,18 @@ use Test::More 0.98;
 # TODO: more extensive tests
 
 subtest parse_getopt_long_opt_spec => sub {
+    ok(!parse_getopt_long_opt_spec('?'));
+    ok(!parse_getopt_long_opt_spec('a|-b'));
+
     is_deeply(
         parse_getopt_long_opt_spec('help'),
         {opts=>['help'], normalized=>'help'});
     is_deeply(
         parse_getopt_long_opt_spec('--help|h|?'),
         {opts=>['help', 'h', '?'], normalized=>'h|help|?'});
+    is_deeply(
+        parse_getopt_long_opt_spec('a|b.c|d#e'),
+        {opts=>['a', 'b.c', 'd#e'], normalized=>'a|b.c|d#e'});
     is_deeply(
         parse_getopt_long_opt_spec('name|alias=i'),
         {opts=>['name','alias'], type=>'i', desttype=>'', normalized=>'alias|name=i'});

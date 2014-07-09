@@ -19,8 +19,8 @@ sub parse_getopt_long_opt_spec {
     my $optspec = shift;
     $optspec =~ qr/\A
                (?:--)?
-               (?P<name>[A-Za-z0-9_-]+|\?)
-               (?P<aliases> (?: \| (?:[A-Za-z0-9_-]+|\?) )*)?
+               (?P<name>[A-Za-z0-9_][A-Za-z0-9_-]*)
+               (?P<aliases> (?: \| (?:[^:|!+=:-][^:|!+=:]*) )*)?
                (?:
                    (?P<is_neg>!) |
                    (?P<is_inc>\+) |
