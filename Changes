@@ -1,5 +1,15 @@
 Revision history for Getopt-Long-Util
 
+0.74    2014-07-09 (SHARYANTO)
+
+        [BUG FIXES]
+
+        - Fix regex to follow Getopt::Long closer.
+
+        - Fix sorting in normalization to make first opt the alphanumeric one,
+          to make opt spec stay legal.
+
+
 0.73    2014-07-09 (SHARYANTO)
 
         [BUG FIXES]
