@@ -75,7 +75,12 @@ sub parse_getopt_long_opt_spec {
 
     $res{normalized} = join(
         "",
-        join("|", sort @{ $res{opts} }),
+        join("|", sort {
+            # we sort but put alphanumeric option first
+            my $a_is_alpha = $a =~ /^[A-Za-z0-9]/ ? 1:0;
+            my $b_is_alpha = $b =~ /^[A-Za-z0-9]/ ? 1:0;
+            $b_is_alpha <=> $a_is_alpha || $a cmp $b;
+        } @{ $res{opts} }),
         ($res{is_neg} ? "!" : $res{is_inc} ? "+" : ""),
         ($res{type} ? ("=", $res{type}, $res{desttype},
                        (defined($res{max_vals}) ? (defined($res{min_vals}) ? "{$res{min_vals},$res{max_vals}}" : "{$res{max_vals}}") : ())) : ()),
