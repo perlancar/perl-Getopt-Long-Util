@@ -1,5 +1,11 @@
 Revision history for Getopt-Long-Util
 
+0.72    2014-07-09 (SHARYANTO) - Pesta demokrasi!
+
+        - Add function: parse_getopt_long_opt_spec() (and make
+          humanize_getopt_long_opt_spec() use that).
+
+
 0.71    2014-04-17 (SHARYANTO)
 
         - First release. Extracted from SHARYANTO-Utils (renamed module from
