@@ -70,9 +70,13 @@ sub parse_getopt_long_opt_spec {
     delete $res{name};
     delete $res{aliases};
 
+    $res{is_neg} = 1 if $res{is_neg};
+    $res{is_inc} = 1 if $res{is_inc};
+
     $res{normalized} = join(
         "",
         join("|", sort @{ $res{opts} }),
+        ($res{is_neg} ? "!" : $res{is_inc} ? "+" : ""),
         ($res{type} ? ("=", $res{type}, $res{desttype},
                        (defined($res{max_vals}) ? (defined($res{min_vals}) ? "{$res{min_vals},$res{max_vals}}" : "{$res{max_vals}}") : ())) : ()),
         ($res{opttype} ? (":", $res{opttype}, $res{desttype}) : ()),

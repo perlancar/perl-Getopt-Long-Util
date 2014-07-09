@@ -22,6 +22,12 @@ subtest parse_getopt_long_opt_spec => sub {
     is_deeply(
         parse_getopt_long_opt_spec('name|alias=i'),
         {opts=>['name','alias'], type=>'i', desttype=>'', normalized=>'alias|name=i'});
+    is_deeply(
+        parse_getopt_long_opt_spec('bool!'),
+        {opts=>['bool'], is_neg=>1, normalized=>'bool!'});
+    is_deeply(
+        parse_getopt_long_opt_spec('inc+'),
+        {opts=>['inc'], is_inc=>1, normalized=>'inc+'});
 };
 
 subtest humanize_getopt_long_opt_spec => sub {
