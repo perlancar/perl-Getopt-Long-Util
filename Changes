@@ -1,5 +1,12 @@
 Revision history for Getopt-Long-Util
 
+0.73    2014-07-09 (SHARYANTO)
+
+        [BUG FIXES]
+
+        - Fix normalization of 'bool!' and 'inc+'.
+
+
 0.72    2014-07-09 (SHARYANTO) - Pesta demokrasi!
 
         - Add function: parse_getopt_long_opt_spec() (and make
