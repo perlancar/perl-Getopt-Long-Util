@@ -38,10 +38,12 @@ subtest parse_getopt_long_opt_spec => sub {
 
 subtest humanize_getopt_long_opt_spec => sub {
     is(humanize_getopt_long_opt_spec('help|h|?'), '--help, -h, -?');
+    is(humanize_getopt_long_opt_spec('h|help|?'), '--help, -h, -?');
     is(humanize_getopt_long_opt_spec('foo!'), '--(no)foo');
+    is(humanize_getopt_long_opt_spec('foo|f!'), '--(no)foo, -f');
     is(humanize_getopt_long_opt_spec('foo=s'), '--foo=s');
     is(humanize_getopt_long_opt_spec('--foo=s'), '--foo=s');
-    is(humanize_getopt_long_opt_spec('foo|bar=s'), '--foo=s, --bar');
+    is(humanize_getopt_long_opt_spec('foo|bar=s'), '--bar=s, --foo');
 };
 
 DONE_TESTING:
