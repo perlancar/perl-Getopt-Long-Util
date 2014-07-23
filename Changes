@@ -1,5 +1,12 @@
 Revision history for Getopt-Long-Util
 
+0.76    2014-07-23 (SHARYANTO)
+
+        - Move sorting of option names to parse_getopt_long_opt_spec(), so other
+          routines (including humanize_getopt_long_opt_spec() need not re-sort
+          the options).
+
+
 0.75    2014-07-23 (SHARYANTO)
 
         - humanize_getopt_long_opt_spec(): Sort option names, put long option
