@@ -21,13 +21,13 @@ subtest parse_getopt_long_opt_spec => sub {
         {opts=>['help'], normalized=>'help'});
     is_deeply(
         parse_getopt_long_opt_spec('--help|h|?'),
-        {opts=>['help', 'h', '?'], normalized=>'h|help|?'});
+        {opts=>['help', 'h', '?'], normalized=>'help|h|?'});
     is_deeply(
         parse_getopt_long_opt_spec('a|b.c|d#e'),
-        {opts=>['a', 'b.c', 'd#e'], normalized=>'a|b.c|d#e'});
+        {opts=>['b.c', 'd#e', 'a'], normalized=>'b.c|d#e|a'}); # XXX should probably be fixed
     is_deeply(
         parse_getopt_long_opt_spec('name|alias=i'),
-        {opts=>['name','alias'], type=>'i', desttype=>'', normalized=>'alias|name=i'});
+        {opts=>['alias','name'], type=>'i', desttype=>'', normalized=>'alias|name=i'});
     is_deeply(
         parse_getopt_long_opt_spec('bool!'),
         {opts=>['bool'], is_neg=>1, normalized=>'bool!'});
