@@ -1,5 +1,14 @@
 Revision history for Getopt-Long-Util
 
+0.77    2014-07-23 (SHARYANTO)
+
+        [REMOVED FEATURES]
+
+        - parse_getopt_long_opt_spec() no longer normalizes option spec nor
+          reorder options. Those features are not really needed and just waste
+          cycles.
+
+
 0.76    2014-07-23 (SHARYANTO)
 
         - Move sorting of option names to parse_getopt_long_opt_spec(), so other
