@@ -63,13 +63,7 @@ sub parse_getopt_long_opt_spec {
             next if $_ ~~ @als;
             push @als, $_;
         }
-        $res{opts} = [sort {
-            # put long name first (--help before -h)
-            (length($a) >1 ? 0:1) <=> (length($b) >1 ? 0:1) ||
-                # put letter first (-h before -?)
-                ($a =~ /\A[A-Za-z]/ ? 0:1) <=> ($b =~ /\A[A-Za-z]/ ? 0:1) ||
-                    $a cmp $b
-                } $res{name}, @als];
+        $res{opts} = [$res{name}, @als];
     } else {
         $res{opts} = [$res{name}];
     }
@@ -79,19 +73,6 @@ sub parse_getopt_long_opt_spec {
     $res{is_neg} = 1 if $res{is_neg};
     $res{is_inc} = 1 if $res{is_inc};
 
-    $res{normalized} = join(
-        "",
-        join("|", @{ $res{opts} }),
-        ($res{is_neg} ? "!" : $res{is_inc} ? "+" : ""),
-        ($res{type} ? ("=", $res{type}, $res{desttype},
-                       (defined($res{max_vals}) ? (defined($res{min_vals}) ? "{$res{min_vals},$res{max_vals}}" : "{$res{max_vals}}") : ())) : ()),
-        ($res{opttype} ? (":", $res{opttype}, $res{desttype}) : ()),
-        (defined($res{optnum}) ? (":", $res{optnum}, $res{desttype}) : ()),
-        ($res{optplus} ? (":", $res{optplus}, $res{desttype}) : ()),
-    );
-    if (defined $res{max_vals}) {
-        $res{min_vals} //= $res{max_vals};
-    }
     \%res;
 }
 
@@ -127,15 +108,18 @@ sub humanize_getopt_long_opt_spec {
 =head2 parse_getopt_long_opt_spec($str) => hash
 
 Parse Getopt::Long option specification. Will produce a hash with some keys:
-C<opts> (array of option names), C<type> (string, type name), C<desttype>
-(either '', or '@' or '%'), C<is_neg> (true for C<--opt!>), C<is_inc> (true for
-C<--opt+>), C<min_vals> (int, usually 0 or 1), C<max_vals> (int, usually 0 or 1
-except for option that requires multiple values), C<normalized> (string,
-normalized form of C<$str>: '--' prefix will be stripped, options will be
-sorted). Will return undef if it can't parse C<$str>. Examples:
+C<opts> (array of option names, in the order specified in the opt spec), C<type>
+(string, type name), C<desttype> (either '', or '@' or '%'), C<is_neg> (true for
+C<--opt!>), C<is_inc> (true for C<--opt+>), C<min_vals> (int, usually 0 or 1),
+C<max_vals> (int, usually 0 or 1 except for option that requires multiple
+values),
 
- $res = parse_getopt_long_opt_spec('help|h|?'); # {opts=>['?','h','help'], type=>undef, num_vals=>1}
- $res = parse_getopt_long_opt_spec('--foo=s');  # {opts=>['foo'], type=>'s', num_vals=>1}
+Will return undef if it can't parse C<$str>.
+
+Examples:
+
+ $res = parse_getopt_long_opt_spec('help|h|?'); # {opts=>['help', 'h', '?'], type=>undef}
+ $res = parse_getopt_long_opt_spec('--foo=s');  # {opts=>['foo'], type=>'s', min_vals=>1, max_vals=>1}
 
 =head2 humanize_getopt_long_opt_spec($str) => str
 
