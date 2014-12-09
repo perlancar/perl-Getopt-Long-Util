@@ -132,4 +132,11 @@ help/usage text.
 
 L<Getopt::Long>
 
+L<Getopt::Long::Spec>, which can also parse Getopt::Long spec into hash as well
+as transform back the hash to Getopt::Long spec. OO interface. I should've found
+this module first before writing my own C<parse_getopt_long_opt_spec()>. But at
+least currently C<parse_getopt_long_opt_spec()> is at least about 30-100+%
+faster than Getopt::Long::Spec::Parser and can handle valid Getopt::Long specs
+that Getopt::Long::Spec::Parser fails to parse, e.g. C<foo|f=s@>.
+
 =cut
