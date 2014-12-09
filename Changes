@@ -1,5 +1,12 @@
 Revision history for Getopt-Long-Util
 
+0.78    2014-12-09 (PERLANCAR)
+
+        - No functional changes.
+
+        - Mention Getopt::Long::Spec.
+
+
 0.77    2014-07-23 (SHARYANTO)
 
         [REMOVED FEATURES]
