@@ -1,5 +1,10 @@
 Revision history for Getopt-Long-Util
 
+0.79    2014-12-21 (PERLANCAR)
+
+	- Add function: detect_getopt_long_script().
+
+
 0.78    2014-12-09 (PERLANCAR)
 
         - No functional changes.
