@@ -18,6 +18,43 @@ our @EXPORT_OK = qw(
 
 our %SPEC;
 
+$SPEC{parse_getopt_long_opt_spec} = {
+    v => 1.1,
+    summary => 'Parse a single Getopt::Long option specification',
+    description => <<'_',
+
+Will produce a hash with some keys: `opts` (array of option names, in the order
+specified in the opt spec), `type` (string, type name), `desttype` (either '',
+or '@' or '%'), `is_neg` (true for `--opt!`), `is_inc` (true for `--opt+`),
+`min_vals` (int, usually 0 or 1), `max_vals` (int, usually 0 or 1 except for
+option that requires multiple values),
+
+Will return undef if it can't parse the string.
+
+_
+    args => {
+        optspec => {
+            schema => 'str*',
+            req => 1,
+            pos => 0,
+        },
+    },
+    args_as => 'array',
+    result_naked => 1,
+    result => {
+        schema => 'hash*',
+    },
+    examples => [
+        {
+            args => {optspec => 'help|h|?'},
+            result => {dash_prefix=>'', opts=>['help', 'h', '?'], type=>undef},
+        },
+        {
+            args => {optspec=>'--foo=s'},
+            result => {dash_prefix=>'--', opts=>['foo'], type=>'s', min_vals=>1, max_vals=>1},
+        },
+    ],
+};
 sub parse_getopt_long_opt_spec {
     my $optspec = shift;
     $optspec =~ qr/\A
@@ -79,6 +116,29 @@ sub parse_getopt_long_opt_spec {
     \%res;
 }
 
+$SPEC{humanize_getopt_long_opt_spec} = {
+    v => 1.1,
+    description => <<'_',
+
+Convert `Getopt::Long` option specification like `help|h|?` or `--foo=s` or
+`debug!` into, respectively, `--help, -h, -?` or `--foo=s` or `--(no)debug`.
+Will die if can't parse the string. The output is suitable for including in
+help/usage text.
+
+_
+    args => {
+        optspec => {
+            schema => 'str*',
+            req => 1,
+            pos => 0,
+        },
+    },
+    args_as => 'array',
+    result_naked => 1,
+    result => {
+        schema => 'str*',
+    },
+};
 sub humanize_getopt_long_opt_spec {
     my $optspec = shift;
 
@@ -212,34 +272,6 @@ sub detect_getopt_long_script {
 }
 
 #ABSTRACT: Utilities for Getopt::Long
-
-=head1 FUNCTIONS
-
-=head2 parse_getopt_long_opt_spec($str) => hash
-
-Parse Getopt::Long option specification. Will produce a hash with some keys:
-C<opts> (array of option names, in the order specified in the opt spec), C<type>
-(string, type name), C<desttype> (either '', or '@' or '%'), C<is_neg> (true for
-C<--opt!>), C<is_inc> (true for C<--opt+>), C<min_vals> (int, usually 0 or 1),
-C<max_vals> (int, usually 0 or 1 except for option that requires multiple
-values),
-
-Will return undef if it can't parse C<$str>.
-
-Examples:
-
- $res = parse_getopt_long_opt_spec('help|h|?'); # {opts=>['help', 'h', '?'], type=>undef}
- $res = parse_getopt_long_opt_spec('--foo=s');  # {opts=>['foo'], type=>'s', min_vals=>1, max_vals=>1}
-
-=head2 humanize_getopt_long_opt_spec($str) => str
-
-Convert L<Getopt::Long> option specification like C<help|h|?> or <--foo=s> or
-C<debug!> into, respectively, C<--help, -h, -?> or C<--foo=s> or C<--(no)debug>.
-Will die if can't parse C<$str>. The output is suitable for including in
-help/usage text.
-
-=head2 detect_getopt_long_script(%args) => envres
-
 
 =head1 SEE ALSO
 
