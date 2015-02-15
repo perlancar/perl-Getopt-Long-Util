@@ -47,11 +47,11 @@ _
     examples => [
         {
             args => {optspec => 'help|h|?'},
-            result => {dash_prefix=>'', opts=>['help', 'h', '?'], type=>undef},
+            result => {dash_prefix=>'', opts=>['help', 'h', '?']},
         },
         {
             args => {optspec=>'--foo=s'},
-            result => {dash_prefix=>'--', opts=>['foo'], type=>'s', min_vals=>1, max_vals=>1},
+            result => {dash_prefix=>'--', opts=>['foo'], type=>'s', desttype=>''},
         },
     ],
 };

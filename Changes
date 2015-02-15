@@ -1,5 +1,11 @@
 Revision history for Getopt-Long-Util
 
+0.80    2015-02-15 (PERLANCAR)
+
+	- Add 'dash_prefix' key in parse result; [compliance] accept -foo
+	  in addition to --foo.
+
+
 0.79    2014-12-21 (PERLANCAR)
 
 	- Add function: detect_getopt_long_script().
