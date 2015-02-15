@@ -21,7 +21,7 @@ our %SPEC;
 sub parse_getopt_long_opt_spec {
     my $optspec = shift;
     $optspec =~ qr/\A
-               (?:--)?
+               (?P<dash_prefix>-{0,2})
                (?P<name>[A-Za-z0-9_][A-Za-z0-9_-]*)
                (?P<aliases> (?: \| (?:[^:|!+=:-][^:|!+=:]*) )*)?
                (?:

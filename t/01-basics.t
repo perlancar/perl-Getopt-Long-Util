@@ -18,22 +18,22 @@ subtest parse_getopt_long_opt_spec => sub {
 
     is_deeply(
         parse_getopt_long_opt_spec('help'),
-        {opts=>['help']});
+        {dash_prefix=>'', opts=>['help']});
     is_deeply(
         parse_getopt_long_opt_spec('--help|h|?'),
-        {opts=>['help', 'h', '?']});
+        {dash_prefix=>'--', opts=>['help', 'h', '?']});
     is_deeply(
         parse_getopt_long_opt_spec('a|b.c|d#e'),
-        {opts=>['a', 'b.c', 'd#e']});
+        {dash_prefix=>'', opts=>['a', 'b.c', 'd#e']});
     is_deeply(
-        parse_getopt_long_opt_spec('name|alias=i'),
-        {opts=>['name','alias'], type=>'i', desttype=>''});
+        parse_getopt_long_opt_spec('-name|alias=i'),
+        {dash_prefix=>'-', opts=>['name','alias'], type=>'i', desttype=>''});
     is_deeply(
         parse_getopt_long_opt_spec('bool!'),
-        {opts=>['bool'], is_neg=>1});
+        {dash_prefix=>'', opts=>['bool'], is_neg=>1});
     is_deeply(
         parse_getopt_long_opt_spec('inc+'),
-        {opts=>['inc'], is_inc=>1});
+        {dash_prefix=>'', opts=>['inc'], is_inc=>1});
 };
 
 subtest humanize_getopt_long_opt_spec => sub {
