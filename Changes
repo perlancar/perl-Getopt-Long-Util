@@ -1,5 +1,12 @@
 Revision history for Getopt-Long-Util
 
+0.81    2015-03-24 (PERLANCAR)
+
+	- No functional changes.
+
+	- [opt] Shave off +- 2-3ms by avoiding experimental+Carp.
+
+
 0.80    2015-02-15 (PERLANCAR)
 
 	- Add 'dash_prefix' key in parse result; [compliance] accept -foo
