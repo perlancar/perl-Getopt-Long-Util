@@ -6,7 +6,8 @@ package Getopt::Long::Util;
 use 5.010001;
 use strict;
 use warnings;
-use experimental 'smartmatch';
+
+use List::Util qw(first);
 
 require Exporter;
 our @ISA       = qw(Exporter);
@@ -97,11 +98,11 @@ sub parse_getopt_long_opt_spec {
 
     if ($res{aliases}) {
         my @als;
-        for (split /\|/, $res{aliases}) {
-            next unless length;
-            next if $_ eq $res{name};
-            next if $_ ~~ @als;
-            push @als, $_;
+        for my $al (split /\|/, $res{aliases}) {
+            next unless length $al;
+            next if $al eq $res{name};
+            next if first {$_ eq $al} @als;
+            push @als, $al;
         }
         $res{opts} = [$res{name}, @als];
     } else {
