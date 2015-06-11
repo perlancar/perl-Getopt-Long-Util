@@ -56,6 +56,7 @@ _
         },
     ],
 };
+# BEGIN_BLOCK: parse_getopt_long_opt_spec
 sub parse_getopt_long_opt_spec {
     my $optspec = shift;
     $optspec =~ qr/\A
@@ -116,6 +117,7 @@ sub parse_getopt_long_opt_spec {
 
     \%res;
 }
+# END_BLOCK: parse_getopt_long_opt_spec
 
 $SPEC{humanize_getopt_long_opt_spec} = {
     v => 1.1,
