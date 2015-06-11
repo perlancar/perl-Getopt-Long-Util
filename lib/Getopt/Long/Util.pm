@@ -7,8 +7,6 @@ use 5.010001;
 use strict;
 use warnings;
 
-use List::Util qw(first);
-
 require Exporter;
 our @ISA       = qw(Exporter);
 our @EXPORT_OK = qw(
@@ -102,7 +100,7 @@ sub parse_getopt_long_opt_spec {
         for my $al (split /\|/, $res{aliases}) {
             next unless length $al;
             next if $al eq $res{name};
-            next if first {$_ eq $al} @als;
+            next if grep {$_ eq $al} @als;
             push @als, $al;
         }
         $res{opts} = [$res{name}, @als];
