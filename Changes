@@ -1,5 +1,10 @@
 Revision history for Getopt-Long-Util
 
+0.83    2015-06-11 (PERLANCAR)
+
+	- Remove usage of List::Util, to reduce startup overhead.
+
+
 0.82    2015-06-11 (PERLANCAR)
 
 	- No functional changes.
