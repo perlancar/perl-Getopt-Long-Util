@@ -1,5 +1,13 @@
 Revision history for Getopt-Long-Util
 
+0.82    2015-06-11 (PERLANCAR)
+
+	- No functional changes.
+
+	- [dzil] Mark around parse_getopt_long_opt_sub() so it's grabable
+	  with dzil plugin DZP:InserBlock::FromModule.
+
+
 0.81    2015-03-24 (PERLANCAR)
 
 	- No functional changes.
