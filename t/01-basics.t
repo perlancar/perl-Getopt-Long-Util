@@ -34,6 +34,9 @@ subtest parse_getopt_long_opt_spec => sub {
     is_deeply(
         parse_getopt_long_opt_spec('inc+'),
         {dash_prefix=>'', opts=>['inc'], is_inc=>1});
+    is_deeply(
+        parse_getopt_long_opt_spec('<>'),
+        {is_arg=>1, dash_prefix=>'', opts=>[]});
 };
 
 subtest humanize_getopt_long_opt_spec => sub {
@@ -44,6 +47,7 @@ subtest humanize_getopt_long_opt_spec => sub {
     is(humanize_getopt_long_opt_spec('foo=s'), '--foo=s');
     is(humanize_getopt_long_opt_spec('--foo=s'), '--foo=s');
     is(humanize_getopt_long_opt_spec('foo|bar=s'), '--foo=s, --bar');
+    is(humanize_getopt_long_opt_spec('<>'), 'argument');
 };
 
 DONE_TESTING:

@@ -22,11 +22,18 @@ $SPEC{parse_getopt_long_opt_spec} = {
     summary => 'Parse a single Getopt::Long option specification',
     description => <<'_',
 
-Will produce a hash with some keys: `opts` (array of option names, in the order
-specified in the opt spec), `type` (string, type name), `desttype` (either '',
-or '@' or '%'), `is_neg` (true for `--opt!`), `is_inc` (true for `--opt+`),
-`min_vals` (int, usually 0 or 1), `max_vals` (int, usually 0 or 1 except for
-option that requires multiple values),
+Will produce a hash with some keys:
+
+* `is_arg` (if true, then option specification is the special `<>` for argument
+  callback)
+* `opts` (array of option names, in the order specified in the opt spec)
+* `type` (string, type name)
+* `desttype` (either '', or '@' or '%'),
+* `is_neg` (true for `--opt!`)
+* `is_inc` (true for `--opt+`)
+* `min_vals` (int, usually 0 or 1)
+* `max_vals` (int, usually 0 or 1 except for option that requires multiple
+  values)
 
 Will return undef if it can't parse the string.
 
@@ -57,6 +64,8 @@ _
 # BEGIN_BLOCK: parse_getopt_long_opt_spec
 sub parse_getopt_long_opt_spec {
     my $optspec = shift;
+    return {is_arg=>1, dash_prefix=>'', opts=>[]}
+        if $optspec eq '<>';
     $optspec =~ qr/\A
                (?P<dash_prefix>-{0,2})
                (?P<name>[A-Za-z0-9_][A-Za-z0-9_-]*)
@@ -145,6 +154,8 @@ sub humanize_getopt_long_opt_spec {
 
     my $parse = parse_getopt_long_opt_spec($optspec)
         or die "Can't parse opt spec $optspec";
+
+    return "argument" if $parse->{is_arg};
 
     my $res = '';
     my $i = 0;
