@@ -1,5 +1,10 @@
 Revision history for Getopt-Long-Util
 
+0.84    2016-01-08 (PERLANCAR)
+
+        - Parse '<>' [RT#110991].
+
+
 0.83    2015-06-11 (PERLANCAR)
 
 	- Remove usage of List::Util, to reduce startup overhead.
