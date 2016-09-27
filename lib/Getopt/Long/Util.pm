@@ -130,7 +130,7 @@ $SPEC{humanize_getopt_long_opt_spec} = {
     v => 1.1,
     description => <<'_',
 
-Convert `Getopt::Long` option specification like `help|h|?` or `--foo=s` or
+Convert <pm:Getopt::Long> option specification like `help|h|?` or `--foo=s` or
 `debug!` into, respectively, `--help, -h, -?` or `--foo=s` or `--(no)debug`.
 Will die if can't parse the string. The output is suitable for including in
 help/usage text.
