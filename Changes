@@ -1,5 +1,11 @@
 Revision history for Getopt-Long-Util
 
+0.85    2016-10-21 (PERLANCAR)
+
+	- Also detect scripts that use Getopt::Long::Complete as using
+	  Getopt::Long (add func.module in result metadata).
+
+
 0.84    2016-01-08 (PERLANCAR)
 
         - Parse '<>' [RT#110991].
