@@ -229,6 +229,7 @@ sub detect_getopt_long_script {
 
     my $yesno = 0;
     my $reason = "";
+    my %extrameta;
 
     my $str = $args{string};
   DETECT:
@@ -273,14 +274,15 @@ sub detect_getopt_long_script {
             $reason = "Does not have 'perl' in the shebang line";
             last;
         }
-        if ($str =~ /^\s*(use|require)\s+Getopt::Long(\s|;)/m) {
+        if ($str =~ /^\s*(use|require)\s+(Getopt::Long(?:::Complete)?)(\s|;)/m) {
             $yesno = 1;
+            $extrameta{'func.module'} = $2;
             last DETECT;
         }
-        $reason = "Can't find any statement requiring Getopt::Long module";
+        $reason = "Can't find any statement requiring Getopt::Long(?::Complete)? module";
     } # DETECT
 
-    [200, "OK", $yesno, {"func.reason"=>$reason}];
+    [200, "OK", $yesno, {"func.reason"=>$reason, %extrameta}];
 }
 
 #ABSTRACT: Utilities for Getopt::Long
