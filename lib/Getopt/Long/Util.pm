@@ -274,11 +274,24 @@ sub detect_getopt_long_script {
             $reason = "Does not have 'perl' in the shebang line";
             last;
         }
-        if ($str =~ /^\s*(use|require)\s+(Getopt::Long(?:::Complete)?)(\s|;)/m) {
-            $yesno = 1;
-            $extrameta{'func.module'} = $2;
-            last DETECT;
+
+        # NOTE: the presence of \s* pattern after ^ causes massive slowdown of
+        # the regex when we reach many thousands of lines, so we use split()
+
+        #if ($str =~ /^\s*(use|require)\s+(Getopt::Long(?:::Complete)?)(\s|;)/m) {
+        #    $yesno = 1;
+        #    $extrameta{'func.module'} = $2;
+        #    last DETECT;
+        #}
+
+        for (split /^/, $str) {
+            if (/^\s*(use|require)\s+(Getopt::Long(?:::Complete)?)(\s|;|$)/) {
+                $yesno = 1;
+                $extrameta{'func.module'} = $2;
+                last DETECT;
+            }
         }
+
         $reason = "Can't find any statement requiring Getopt::Long(?::Complete)? module";
     } # DETECT
 
