@@ -198,26 +198,21 @@ _
         filename => {
             summary => 'Path to file to be checked',
             schema => 'str*',
-            description => <<'_',
-
-Either `filename` or `string` must be specified.
-
-_
+            pos => 0,
+            cmdline_aliases => {f=>{}},
         },
         string => {
             summary => 'Path to file to be checked',
             schema => 'buf*',
-            description => <<'_',
-
-Either `file` or `string` must be specified.
-
-_
         },
         include_noexec => {
             summary => 'Include scripts that do not have +x mode bit set',
             schema  => 'bool*',
             default => 1,
         },
+    },
+    args_rels => {
+        'req_one' => ['filename', 'string'],
     },
 };
 sub detect_getopt_long_script {
