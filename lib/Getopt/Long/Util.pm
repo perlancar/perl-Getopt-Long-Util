@@ -202,7 +202,7 @@ _
             cmdline_aliases => {f=>{}},
         },
         string => {
-            summary => 'Path to file to be checked',
+            summary => 'String to be checked',
             schema => 'buf*',
         },
         include_noexec => {
