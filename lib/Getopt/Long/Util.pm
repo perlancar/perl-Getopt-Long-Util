@@ -13,6 +13,7 @@ our @EXPORT_OK = qw(
                        parse_getopt_long_opt_spec
                        humanize_getopt_long_opt_spec
                        detect_getopt_long_script
+                       gen_getopt_long_spec_from_getopt_std_spec
                );
 
 our %SPEC;
@@ -291,6 +292,48 @@ sub detect_getopt_long_script {
     } # DETECT
 
     [200, "OK", $yesno, {"func.reason"=>$reason, %extrameta}];
+}
+
+$SPEC{gen_getopt_long_spec_from_getopt_std_spec} = {
+    v => 1.1,
+    summary => 'Generate Getopt::Long spec from Getopt::Std spec',
+    args => {
+        spec => {
+            summary => 'Getopt::Std spec string',
+            schema => 'str*',
+            req => 1,
+            pos => 0,
+        },
+        is_getopt => {
+            summary => 'Whether to assume spec is for getopt() or getopts()',
+            description => <<'_',
+
+By default spec is assumed to be for getopts() instead of getopt(). This means
+that for a spec like `abc:`, `a` and `b` don't take argument while `c` does. But
+if `is_getopt` is true, the meaning of `:` is reversed: `a` and `b` take
+arguments while `c` doesn't.
+
+_
+            schema => 'bool',
+        },
+    },
+    result_naked => 1,
+    result => {
+        schema => 'hash*',
+    },
+};
+sub gen_getopt_long_spec_from_getopt_std_spec {
+    my %args = @_;
+
+    my $is_getopt = $args{is_getopt};
+    my $spec = {};
+
+    while ($args{spec} =~ /(.)(:?)/g) {
+        $spec->{$1 . ($is_getopt ? ($2 ? "" : "=s") : ($2 ? "=s" : ""))} =
+            sub {};
+    }
+
+    $spec;
 }
 
 #ABSTRACT: Utilities for Getopt::Long
