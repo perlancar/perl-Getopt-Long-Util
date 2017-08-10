@@ -281,14 +281,14 @@ sub detect_getopt_long_script {
         #}
 
         for (split /^/, $str) {
-            if (/^\s*(use|require)\s+(Getopt::Long(?:::Complete)?)(\s|;|$)/) {
+            if (/^\s*(use|require)\s+(Getopt::Long(?:::Complete|::Less|::EvenLess)?)(\s|;|$)/) {
                 $yesno = 1;
                 $extrameta{'func.module'} = $2;
                 last DETECT;
             }
         }
 
-        $reason = "Can't find any statement requiring Getopt::Long(?::Complete)? module";
+        $reason = "Can't find any statement requiring Getopt::Long(?::Complete|::Less|::EvenLess)? module";
     } # DETECT
 
     [200, "OK", $yesno, {"func.reason"=>$reason, %extrameta}];
