@@ -261,6 +261,7 @@ sub detect_getopt_long_script {
                 local $/;
                 $str = <$fh>;
             }
+            close $fh;
         }
         unless ($str =~ /\A#!/) {
             $reason = "Does not start with a shebang (#!) sequence";
@@ -336,6 +337,7 @@ sub gen_getopt_long_spec_from_getopt_std_spec {
     $spec;
 }
 
+1;
 #ABSTRACT: Utilities for Getopt::Long
 
 =head1 SEE ALSO

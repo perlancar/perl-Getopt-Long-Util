@@ -1,3 +1,8 @@
+0.890   2017-08-10 (PERLANCAR)
+
+	- Detect GL:{Less,EvenLess}-based scripts.
+
+
 0.88    2016-10-30 (PERLANCAR)
 
 	- Add gen_getopt_long_spec_from_getopt_std_spec().
