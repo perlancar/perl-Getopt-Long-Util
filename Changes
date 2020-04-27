@@ -1,3 +1,9 @@
+0.891   2020-04-27  Released-By: PERLANCAR; Urgency: medium
+
+	- More sophisticated humanize_getopt_long_opt_spec(): add options
+	  key_label, value_label, separator.
+
+
 0.890   2017-08-10  Released-By: PERLANCAR
 
 	- Detect GL:{Less,EvenLess}-based scripts.

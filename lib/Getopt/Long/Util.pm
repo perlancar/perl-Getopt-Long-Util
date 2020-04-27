@@ -142,7 +142,7 @@ notation that is suitable for including in help/usage text, for example:
     --foo=s        ->  --foo=somelabel  (if you provide 'value_label')
     --foo:s        ->  --foo[=s]
     --foo=s@       ->  --foo=s+
-    --foo=s%       ->  --foo=key=value
+    --foo=s%       ->  --foo key=value
     --foo=s        ->  --foo=somelabel  (if you provide 'value_label')
     --debug!       ->  --(no)debug
 
@@ -175,7 +175,7 @@ _
     },
 };
 sub humanize_getopt_long_opt_spec {
-    my $opts = shift if ref $_[0] eq 'HASH'; $opts //= {};
+    my $opts = {}; $opts = shift if ref $_[0] eq 'HASH';
     my $optspec = shift;
 
     my $parse = parse_getopt_long_opt_spec($optspec)
@@ -207,7 +207,7 @@ sub humanize_getopt_long_opt_spec {
                 $res .= $value_label;
                 $res .= "]" if $parse->{opttype};
             }
-            $res .= "+" if $parse->{desttype} eq '@';
+            $res .= "+" if ($parse->{desttype} // '') eq '@';
         }
     }
     $res;
