@@ -1,6 +1,8 @@
 package Getopt::Long::Util;
 
+# AUTHORITY
 # DATE
+# DIST
 # VERSION
 
 use 5.010001;
@@ -131,10 +133,20 @@ $SPEC{humanize_getopt_long_opt_spec} = {
     v => 1.1,
     description => <<'_',
 
-Convert <pm:Getopt::Long> option specification like `help|h|?` or `--foo=s` or
-`debug!` into, respectively, `--help, -h, -?` or `--foo=s` or `--(no)debug`.
-Will die if can't parse the string. The output is suitable for including in
-help/usage text.
+Convert <pm:Getopt::Long> option specification into a more human-friendly
+notation that is suitable for including in help/usage text, for example:
+
+    help|h|?       ->  --help, -h, -?
+    help|h|?       ->  --help | -h | -?  (if you provide 'separator')
+    --foo=s        ->  --foo=s
+    --foo=s        ->  --foo=somelabel  (if you provide 'value_label')
+    --foo:s        ->  --foo[=s]
+    --foo=s@       ->  --foo=s+
+    --foo=s%       ->  --foo=key=value
+    --foo=s        ->  --foo=somelabel  (if you provide 'value_label')
+    --debug!       ->  --(no)debug
+
+Will die if can't parse the optspec string.
 
 _
     args => {
@@ -143,6 +155,18 @@ _
             req => 1,
             pos => 0,
         },
+        separator => {
+            schema => 'str*',
+            default => ', ',
+        },
+        key_label => {
+            schema => 'str*',
+            default => 'key',
+        },
+        value_label => {
+            schema => 'str*',
+        },
+
     },
     args_as => 'array',
     result_naked => 1,
@@ -151,6 +175,7 @@ _
     },
 };
 sub humanize_getopt_long_opt_spec {
+    my $opts = shift if ref $_[0] eq 'HASH'; $opts //= {};
     my $optspec = shift;
 
     my $parse = parse_getopt_long_opt_spec($optspec)
@@ -162,7 +187,7 @@ sub humanize_getopt_long_opt_spec {
     my $i = 0;
     for (@{ $parse->{opts} }) {
         $i++;
-        $res .= ", " if length($res);
+        $res .= ($opts->{separator} // ", ") if length($res);
         if ($parse->{is_neg} && length($_) > 1) {
             $res .= "--(no)$_";
         } else {
@@ -171,7 +196,18 @@ sub humanize_getopt_long_opt_spec {
             } else {
                 $res .= "-$_";
             }
-            $res .= "=$parse->{type}" if $i==1 && $parse->{type};
+            if ($i==1 && ($parse->{type} || $parse->{opttype})) {
+                # show value label
+                my $key_label = $opts->{key_label} // 'key';
+                my $value_label = $opts->{value_label} //
+                    $parse->{type} // $parse->{opttype};
+                $res .= "[" if $parse->{opttype};
+                $res .= ($parse->{type} && $parse->{desttype} eq '%' ? " " : "=");
+                $res .= "key=" if $parse->{desttype} eq '%';
+                $res .= $value_label;
+                $res .= "]" if $parse->{opttype};
+            }
+            $res .= "+" if $parse->{desttype} eq '@';
         }
     }
     $res;
