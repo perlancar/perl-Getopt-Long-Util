@@ -90,22 +90,26 @@ sub parse_getopt_long_opt_spec {
                    (?:
                        :
                        (?P<opttype>[siof])
-                       (?P<desttype>|[%@])
+                       (?P<desttype>|[%@])?
                    ) |
                    (?:
                        :
-                       (?P<optnum>\d+)
-                       (?P<desttype>|[%@])
-                   )
+                       (?P<optnum>-?\d+)
+                       (?P<desttype>|[%@])?
+                   ) |
                    (?:
                        :
                        (?P<optplus>\+)
-                       (?P<desttype>|[%@])
+                       (?P<desttype>|[%@])?
                    )
                )?
                \z/x
                    or return undef;
     my %res = %+;
+
+    if (defined $res{optnum}) {
+        $res{type} = 'i';
+    }
 
     if ($res{aliases}) {
         my @als;
