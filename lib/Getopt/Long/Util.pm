@@ -140,15 +140,20 @@ $SPEC{humanize_getopt_long_opt_spec} = {
 Convert <pm:Getopt::Long> option specification into a more human-friendly
 notation that is suitable for including in help/usage text, for example:
 
-    help|h|?       ->  --help, -h, -?
-    help|h|?       ->  --help | -h | -?  (if you provide 'separator')
-    --foo=s        ->  --foo=s
-    --foo=s        ->  --foo=somelabel  (if you provide 'value_label')
-    --foo:s        ->  --foo[=s]
-    --foo=s@       ->  --foo=s+
-    --foo=s%       ->  --foo key=value
-    --foo=s        ->  --foo=somelabel  (if you provide 'value_label')
-    --debug!       ->  --(no)debug
+    help|h|?       ->  "--help, -h, -?"
+    help|h|?       ->  "--help | -h | -?"               # if you provide 'separator')
+    --foo=s        ->  "--foo=s"
+    --foo=s        ->  "--foo=somelabel"                # if you provide 'value_label'
+    --foo:s        ->  "--foo[=s]"
+    --foo=s@       ->  "(--foo=s)+"
+    --foo=s%       ->  "(--foo key=value)+"
+    --foo=s%       ->  "(--foo somelabel1=somelabel2)+" # if you provide 'key_label' and 'value_label'
+    --debug!       ->  "--(no)debug"
+
+It also produces POD-formatted string for use in POD documentation:
+
+    --foo=s        ->  {plaintext=>"--foo=s", pod=>"B<--foo>=I<s>"}
+                                                        # if you set 'extended' to true
 
 Will die if can't parse the optspec string.
 
@@ -178,7 +183,7 @@ _
     args_as => 'array',
     result_naked => 1,
     result => {
-        schema => 'str*',
+        schema => ['any*', {of=>[['str*'], ['hash*', {of=>'str*'}]]}],
     },
 };
 sub humanize_getopt_long_opt_spec {
