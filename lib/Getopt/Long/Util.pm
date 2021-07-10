@@ -141,7 +141,7 @@ Convert <pm:Getopt::Long> option specification into a more human-friendly
 notation that is suitable for including in help/usage text, for example:
 
     help|h|?       ->  "--help, -h, -?"
-    help|h|?       ->  "--help | -h | -?"               # if you provide 'separator')
+    help|h|?       ->  "--help | -h | -?"               # if you provide 'separator'
     --foo=s        ->  "--foo=s"
     --foo=s        ->  "--foo=somelabel"                # if you provide 'value_label'
     --foo:s        ->  "--foo[=s]"
