@@ -1,3 +1,13 @@
+0.893   2021-07-10  Released-By: PERLANCAR; Urgency: medium
+
+	[function humanize_getopt_long_opt_spec]
+
+        - Add option 'extended' to return plaintext version as well as
+          POD-formatted version.
+
+        - [bugfix] key_label option was not observed.
+
+
 0.892   2020-10-27  Released-By: PERLANCAR; Urgency: medium
 
 	- [bugfix] Fix regex so 'opt:1' is recognized.
@@ -130,4 +140,3 @@
 
         - First release. Extracted from SHARYANTO-Utils (renamed module from
           SHARYANTO::Getopt::Long::Util to Getopt::Long::Util).
-
