@@ -170,7 +170,10 @@ _
         value_label => {
             schema => 'str*',
         },
-
+        extended => {
+            summary => 'If set to true, will return a hash of multiple formats instead of a single plaintext format',
+            schema => 'bool*',
+        },
     },
     args_as => 'array',
     result_naked => 1,
@@ -187,34 +190,61 @@ sub humanize_getopt_long_opt_spec {
 
     return "argument" if $parse->{is_arg};
 
-    my $res = '';
+    my $plain_res = '';
+    my $pod_res   = '';
     my $i = 0;
     for (@{ $parse->{opts} }) {
         $i++;
-        $res .= ($opts->{separator} // ", ") if length($res);
+        my $opt_plain_res = '';
+        my $opt_pod_res   = '';
         if ($parse->{is_neg} && length($_) > 1) {
-            $res .= "--(no)$_";
+            $opt_plain_res .= "--(no)$_";
+            $opt_pod_res   .= "B<--(no)$_>";
         } else {
             if (length($_) > 1) {
-                $res .= "--$_";
+                $opt_plain_res .= "--$_";
+                $opt_pod_res   .= "B<--$_>";
             } else {
-                $res .= "-$_";
+                $opt_plain_res .= "-$_";
+                $opt_pod_res   .= "B<-$_>";
             }
             if ($i==1 && ($parse->{type} || $parse->{opttype})) {
                 # show value label
                 my $key_label = $opts->{key_label} // 'key';
                 my $value_label = $opts->{value_label} //
                     $parse->{type} // $parse->{opttype};
-                $res .= "[" if $parse->{opttype};
-                $res .= ($parse->{type} && $parse->{desttype} eq '%' ? " " : "=");
-                $res .= "key=" if $parse->{desttype} eq '%';
-                $res .= $value_label;
-                $res .= "]" if $parse->{opttype};
+
+                $opt_plain_res .= "[" if $parse->{opttype};
+                $opt_plain_res .= ($parse->{type} && $parse->{desttype} eq '%' ? " " : "=");
+                $opt_plain_res .= "$key_label=" if $parse->{desttype} eq '%';
+                $opt_plain_res .= $value_label;
+                $opt_plain_res .= "]" if $parse->{opttype};
+
+                $opt_pod_res   .= "[" if $parse->{opttype};
+                $opt_pod_res   .= ($parse->{type} && $parse->{desttype} eq '%' ? " " : "=");
+                $opt_pod_res   .= "I<$key_label>=" if $parse->{desttype} eq '%';
+                $opt_pod_res   .= "I<$value_label>";
+                $opt_pod_res   .= "]" if $parse->{opttype};
             }
-            $res .= "+" if ($parse->{desttype} // '') eq '@';
+            $opt_plain_res = "($opt_plain_res)+" if ($parse->{desttype} // '') =~ /@|%/;
+            $opt_pod_res   = "($opt_pod_res)+"   if ($parse->{desttype} // '') =~ /@|%/;
         }
+
+        $plain_res .= ($opts->{separator} // ", ") if length($plain_res);
+        $pod_res   .= ($opts->{separator} // ", ") if length($pod_res);
+
+        $plain_res .= $opt_plain_res;
+        $pod_res   .= $opt_pod_res;
     }
-    $res;
+
+    if ($opts->{extended}) {
+        return {
+            plaintext => $plain_res,
+            pod => $pod_res,
+        };
+    } else {
+        $plain_res;
+    }
 }
 
 $SPEC{detect_getopt_long_script} = {
