@@ -1,10 +1,5 @@
 package Getopt::Long::Util;
 
-# AUTHORITY
-# DATE
-# DIST
-# VERSION
-
 use 5.010001;
 use strict;
 use warnings;
@@ -16,7 +11,13 @@ our @EXPORT_OK = qw(
                        humanize_getopt_long_opt_spec
                        detect_getopt_long_script
                        gen_getopt_long_spec_from_getopt_std_spec
+                       array_getopt_long_spec_to_hash
                );
+
+# AUTHORITY
+# DATE
+# DIST
+# VERSION
 
 our %SPEC;
 
@@ -104,7 +105,7 @@ sub parse_getopt_long_opt_spec {
                    )
                )?
                \z/x
-                   or return undef;
+                   or return;
     my %res = %+;
 
     if (defined $res{optnum}) {
@@ -410,6 +411,70 @@ sub gen_getopt_long_spec_from_getopt_std_spec {
     }
 
     $spec;
+}
+
+$SPEC{array_getopt_long_spec_to_hash} = {
+    v => 1.1,
+    summary => 'Convert array form of Getopt::Long spec to hash',
+    description => <<'_',
+
+<pm:Getopt::Long>'s `GetOptions` function accepts a list of arguments. The first
+optional argument is a hash for option storage. After that, a list of option
+specs (e.g. `foo=s`), each optionally followed by a reference to specify
+destination (e.g. a reference to scalar, or array, or code).
+
+Die on failure (e.g. invalid option spec).
+
+This routine converts that array into a hash of option specs as keys and
+destinations as values. If an option spec does not have a destination, its
+destination is set to `undef`. If hash storage is specified then the destination
+will fall back to the hash storage's appropriate key when a specific destination
+is not specified.
+
+Note that by converting to hash, 1) duplicate option specs are merged; and 2)
+order of option specs is not preserved.
+
+_
+    args => {
+        spec => {
+            summary => 'Getopt::Long spec',
+            schema => 'array*',
+            req => 1,
+            pos => 0,
+        },
+    },
+    args_as => 'array',
+    result_naked => 1,
+    result => {
+        schema => 'hash*',
+    },
+};
+sub array_getopt_long_spec_to_hash {
+    my $go_spec = [ @_ ];
+    my $hash_spec = {};
+
+    my $hash_storage;
+    $hash_storage = shift @$go_spec
+        if @$go_spec && ref $go_spec->[0] eq 'HASH';
+
+    while (@$go_spec) {
+        my $opt_spec = shift @$go_spec;
+        my $dest;
+        if (@$go_spec && ref $go_spec->[0]) {
+            $dest = shift @$go_spec;
+        } elsif ($hash_storage) {
+            my $res = parse_getopt_long_opt_spec($opt_spec)
+                or die "Invalid option spec '$opt_spec'";
+            my $name = $res->{opts}[0];
+            $hash_storage->{$name} = undef unless exists $hash_storage->{$name};
+            $dest = ref $hash_storage->{$name} ?
+                $hash_storage->{$name} :
+                \($hash_storage->{$name});
+        }
+        $hash_spec->{$opt_spec} = $dest;
+    }
+
+    $hash_spec;
 }
 
 1;
