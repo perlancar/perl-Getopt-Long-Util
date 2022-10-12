@@ -208,14 +208,14 @@ sub humanize_getopt_long_opt_spec {
         my $opt_pod_res   = '';
         if ($parse->{is_neg} && length($_) > 1) {
             $opt_plain_res .= "--(no)$_";
-            $opt_pod_res   .= "B<--(no)$_>";
+            $opt_pod_res   .= defined($opts->{opt_link}) ? "L<--(no)$_|$opts->{opt_link}>" : "B<--(no)$_>";
         } else {
             if (length($_) > 1) {
                 $opt_plain_res .= "--$_";
-                $opt_pod_res   .= "B<--$_>";
+                $opt_pod_res   .= defined($opts->{opt_link}) ? "L<--$_|$opts->{opt_link}>" : "B<--$_>";
             } else {
                 $opt_plain_res .= "-$_";
-                $opt_pod_res   .= "B<-$_>";
+                $opt_pod_res   .= defined($opts->{opt_link}) ? "L<-$_|$opts->{opt_link}>" : "B<-$_>";
             }
             if ($i==1 && ($parse->{type} || $parse->{opttype})) {
                 # show value label
